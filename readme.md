@@ -3,7 +3,7 @@
 
 **cx-adminlogger** is a lightweight, export-based staff/admin command logger for FiveM. It sends clean, premium Discord embeds whenever staff commands are executed.
 
-Designed for Qbox / ox_lib, but works with any framework or resource that uses RegisterCommand or lib.addCommand.
+Designed for Qbox / ox, but works with any framework or resource that uses RegisterCommand or lib.addCommand.
 
 The logger can be triggered anywhere using exports. This resource does **NOT** hook or override anything globally. Instead, you explicitly log commands where they matter, giving you full control and zero surprises.
 
