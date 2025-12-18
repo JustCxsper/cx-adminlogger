@@ -1,6 +1,6 @@
 # cx-adminlogger
 
-![Alt text]([https://example.com/path/to/image.png](https://testing.strataservers.com/cx-scripts/cx-logger1.0.jpg))
+![Alt text]([https://example.com/path/to/image.png](https://testing.strataservers.com/cx-scripts/cx-logger1.0.jpg)
 
 
 
