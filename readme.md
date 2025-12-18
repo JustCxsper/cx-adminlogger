@@ -339,6 +339,94 @@ lib.addCommand({'additem', 'giveitem'}, {
 end)
 ```
 
+### Example: qbx_medical
+
+**qbx_medical** also uses `lib.addCommand`, often for admin-only commands.
+
+#### Helper Function
+
+Add this helper near the top of qbx_medical’s server file:
+
+```lua
+local function logAdminCmd(source, cmdName, raw, args)
+    local text = raw and raw ~= '' and ('/' .. raw) or ('/' .. cmdName)
+
+    if (not raw or raw == '') and type(args) == 'table' and #args > 0 then
+        text = ('/%s %s'):format(cmdName, table.concat(args, ' '))
+    end
+
+    exports['cx-adminlogger']:Log(source, cmdName, text)
+end
+```
+
+#### Usage
+
+**/revive Command**
+```lua
+lib.addCommand('revive', {
+    help = locale('info.revive_player_a'),
+    restricted = 'group.admin',
+    params = {
+        { name = 'id', help = locale('info.player_id'), type = 'playerId', optional = true },
+    }
+}, function(source, args, raw)
+    logAdminCmd(source, 'revive', raw, args)
+
+    if not args.id then args.id = source end
+    local player = exports.qbx_core:GetPlayer(tonumber(args.id))
+    if not player then
+        exports.qbx_core:Notify(source, locale('error.not_online'), 'error')
+        return
+    end
+
+    revivePlayer(args.id)
+end)
+```
+
+**/kill Command**
+```lua
+lib.addCommand('kill', {
+    help = locale('info.kill'),
+    restricted = 'group.admin',
+    params = {
+        { name = 'id', help = locale('info.player_id'), type = 'playerId', optional = true },
+    }
+}, function(source, args, raw)
+    logAdminCmd(source, 'kill', raw, args)
+
+    if not args.id then args.id = source end
+    local player = exports.qbx_core:GetPlayer(tonumber(args.id))
+    if not player then
+        exports.qbx_core:Notify(source, locale('error.not_online'), 'error')
+        return
+    end
+
+    lib.callback.await('qbx_medical:client:killPlayer', args.id)
+end)
+```
+
+**/aheal Command**
+```lua
+lib.addCommand('aheal', {
+    help = locale('info.heal_player_a'),
+    restricted = 'group.admin',
+    params = {
+        { name = 'id', help = locale('info.player_id'), type = 'playerId', optional = true },
+    }
+}, function(source, args, raw)
+    logAdminCmd(source, 'aheal', raw, args)
+
+    if not args.id then args.id = source end
+    local player = exports.qbx_core:GetPlayer(tonumber(args.id))
+    if not player then
+        exports.qbx_core:Notify(source, locale('error.not_online'), 'error')
+        return
+    end
+
+    heal(args.id)
+end)
+```
+
 ---
 
 ## 🎛️ Command Whitelisting (Optional)
@@ -372,17 +460,4 @@ If configured correctly, a Discord embed will appear instantly.
 
 ---
 
-## 🏗️ Design Philosophy
 
-**cx-adminlogger** is built to be:
-
-- 🎯 **Explicit**: You choose what to log
-- 🔮 **Predictable**: No surprises
-- 🚀 **Non-invasive**: No global changes
-- 🛡️ **Production-safe**: Reliable in live environments
-
-*No hidden hooks. No global overrides. No unexpected logging.*
-
-*If a command matters, you log it. If it doesn’t, you don’t.*
-
----
