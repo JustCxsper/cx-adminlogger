@@ -1,5 +1,8 @@
 # cx-adminlogger
 
+![Alt text]([https://example.com/path/to/image.png](https://testing.strataservers.com/cx-scripts/cx-logger1.0.jpg))
+
+
 
 **cx-adminlogger** is a lightweight, export-based staff/admin command logger for FiveM. It sends clean, premium Discord embeds whenever staff commands are executed.
 
