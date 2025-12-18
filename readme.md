@@ -1,52 +1,50 @@
-# 🎯 cx-adminlogger
+# cx-adminlogger
 
 
 **cx-adminlogger** is a lightweight, export-based staff/admin command logger for FiveM. It sends clean, premium Discord embeds whenever staff commands are executed.
 
-Designed for **Qbox / ox**, but works with any framework or resource that uses `RegisterCommand` or `lib.addCommand`.
+Designed for Qbox / ox_lib, but works with any framework or resource that uses RegisterCommand or lib.addCommand.
 
 The logger can be triggered anywhere using exports. This resource does **NOT** hook or override anything globally. Instead, you explicitly log commands where they matter, giving you full control and zero surprises.
 
 ---
 
-## 📋 Overview
+## Overview
 
-FiveM does not provide a reliable global event that fires for every command executed across all resources. Because of this limitation, **cx-adminlogger** is intentionally built around exports.
+FiveM does not provide a reliable global event that fires for every command executed across all resources. Because of this limitation, cx-adminlogger is intentionally built around exports.
 
 This design means:
-- ✅ You decide which commands get logged
-- ✅ You decide where logging happens
-- ✅ Nothing breaks
-- ✅ Nothing double-logs
-- ✅ Works perfectly with admin menus, inventory scripts, and custom tools
+- You decide which commands get logged
+- You decide where logging happens
+- Nothing breaks
+- Nothing double-logs
+- Works perfectly with admin menus, inventory scripts, and custom tools
 
-*If a command is important, you log it. If it isn’t, you don’t.*
-
----
-
-## ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 🎨 Clean, premium Discord embeds | Beautifully formatted logs |
-| 🔒 Staff-only logging via ACE permissions | Secure and controlled |
-| 🛠️ Works with RegisterCommand and lib.addCommand | Versatile integration |
-| 📝 Optional command whitelist | Fine-tune what gets logged |
-| 📤 Simple and readable exports | Easy to use |
-| 🚫 No overrides | Non-invasive |
-| 🚫 No hooks | Predictable behavior |
-| ✅ Production-safe | Reliable and stable |
+If a command is important, you log it. If it isn't, you don't.
 
 ---
 
-## 📦 Installation
+## Features
 
-1. **Place the resource** into your server resources folder:
+- Clean, premium Discord embeds
+- Staff-only logging via ACE permissions
+- Works with RegisterCommand and lib.addCommand
+- Optional command whitelist
+- Simple and readable exports
+- No overrides
+- No hooks
+- Production-safe
+
+---
+
+## Installation
+
+1. Place the resource into your server resources folder:
    ```
    resources/cx-adminlogger
    ```
 
-2. **Start it early** in your `server.cfg` **BEFORE** other resources:
+2. Start it early in your server.cfg BEFORE other resources:
    ```cfg
    ensure cx-adminlogger
    ```
@@ -54,12 +52,12 @@ This design means:
 
 ---
 
-> **IMPORTANT:** Make sure your staff are actually assigned to groups using `add_principal` or txAdmin.
+> IMPORTANT: Make sure your staff are actually assigned to groups using add_principal or txAdmin.
 ---
 
-## ⚙️ Configuration
+## Configuration
 
-Open `config.lua` and configure the logger.
+Open config.lua and configure the logger.
 
 ### Discord Webhook
 ```lua
@@ -82,51 +80,51 @@ Config.LogCommands = {}
 Config.Debug = true
 ```
 
-## 🔧 How cx-adminlogger Works
+## How cx-adminlogger Works
 
-**cx-adminlogger** exposes exports that other resources can call.
+cx-adminlogger exposes exports that other resources can call.
 
 When you call an export:
 
-1. 🔍 The logger checks if the player is staff
-2. 📋 It checks the optional whitelist
-3. 📤 It sends a Discord embed
-4. ▶️ The command continues normally
+1. The logger checks if the player is staff
+2. It checks the optional whitelist
+3. It sends a Discord embed
+4. The command continues normally
 
-*If the player is NOT staff, nothing is logged.*
+If the player is NOT staff, nothing is logged.
 
 ---
 
-## 📤 Available Exports
+## Available Exports
 
 cx-adminlogger provides two main exports for logging commands. Choose the one that fits your needs based on how much detail you want in the Discord embed.
 
 ### 1. Basic Logging: `Log`
 
-**Purpose:** Use this for simple command logging where you only need the command text in the Discord embed.
+Purpose: Use this for simple command logging where you only need the command text in the Discord embed.
 
-**When to use:** Ideal for commands without additional context like targets or amounts (e.g., `/noclip`, `/godmode`).
+When to use: Ideal for commands without additional context like targets or amounts (e.g., /noclip, /godmode).
 
-**Export Call:**
+Export Call:
 ```lua
 exports['cx-adminlogger']:Log(source, commandName, rawText)
 ```
 
-**Parameters:**
+Parameters:
 
 | Parameter | Type | Description | Example |
 |-----------|------|-------------|---------|
-| `source` | number | The server ID of the player executing the command | `1` |
-| `commandName` | string | A lowercase identifier for whitelist checks | `'noclip'` |
-| `rawText` | string | The full command text displayed in Discord | `'/noclip'` |
+| source | number | The server ID of the player executing the command | 1 |
+| commandName | string | A lowercase identifier for whitelist checks | 'noclip' |
+| rawText | string | The full command text displayed in Discord | '/noclip' |
 
-**Example:**
+Example:
 ```lua
 -- Logging a simple noclip command
 exports['cx-adminlogger']:Log(source, 'noclip', '/noclip')
 ```
 
-**Discord Embed Result:** A clean embed showing the command `/noclip` executed by the staff member.
+Discord Embed Result: A clean embed showing the command /noclip executed by the staff member.
 
 ### 2. Advanced Logging: `LogWithFields`
 
@@ -158,23 +156,23 @@ This makes logs readable at a glance and removes the need to manually parse comm
 
 #### When Should You Use Extra Fields?
 
-**Use extra fields when a command:**
+Use extra fields when a command:
 - Targets another player
 - Gives or removes items
 - Changes money, jobs, or permissions
 - Needs audit clarity later
 
-**Do NOT use extra fields when:**
+Do NOT use extra fields when:
 - The command is a simple toggle
 - The command only affects the executor
 - There are no meaningful arguments
 
-**Examples:**
-- `/noclip` → no extra fields
-- `/admin` → no extra fields
-- `/giveitem` → use extra fields
-- `/bring` → use extra fields
-- `/setjob` → use extra fields
+Examples:
+- /noclip → no extra fields
+- /admin → no extra fields
+- /giveitem → use extra fields
+- /bring → use extra fields
+- /setjob → use extra fields
 
 #### How the Export Works
 
@@ -236,13 +234,13 @@ This produces a Discord embed that clearly shows:
 
 #### Inline vs Non-Inline Fields
 
-- **Use `inline = true` for:**
+- Use inline = true for:
   - Player IDs
   - Item names
   - Amounts
   - Short values
 
-- **Use `inline = false` for:**
+- Use inline = false for:
   - Reasons
   - Notes
   - Long text
@@ -265,11 +263,11 @@ Extra fields exist to make logs readable, auditable, and professional — not no
 
 ---
 
-## 📚 Examples
+## Examples
 
 ### Example: QBX AdminMenu
 
-**qbx_adminmenu** registers commands using `lib.addCommand`.
+qbx_adminmenu registers commands using lib.addCommand.
 
 #### Step 1: Add a helper function near the top of the file.
 
@@ -301,7 +299,7 @@ The command works exactly the same. It is now logged.
 
 ### Example: OX Inventory
 
-**ox_inventory** also uses `lib.addCommand`, often for admin-only commands.
+ox_inventory also uses lib.addCommand, often for admin-only commands.
 
 #### Helper Function
 
@@ -341,7 +339,7 @@ end)
 
 ### Example: qbx_medical
 
-**qbx_medical** also uses `lib.addCommand`, often for admin-only commands.
+qbx_medical also uses lib.addCommand, often for admin-only commands.
 
 #### Helper Function
 
@@ -429,7 +427,7 @@ end)
 
 ---
 
-## 🎛️ Command Whitelisting (Optional)
+## Command Whitelisting (Optional)
 
 If you only want certain commands logged, edit `config.lua`.
 
@@ -448,7 +446,7 @@ If this list is empty, everything passed to the exports is logged (staff-only).
 
 ---
 
-## 🧪 Testing
+## Testing
 
 In-game, as a staff member, run:
 
